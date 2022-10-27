@@ -800,6 +800,67 @@ LExit:
 
     return hr;
 }
+// TODO
+HRESULT ExternalEngineGetRelatedBundleVariable(
+    __in BURN_ENGINE_STATE* /*pEngineState*/,
+    __in_z LPCWSTR wzBundleId,
+    __in_z LPCWSTR wzVariable,
+    __out_ecount_opt(*pcchValue) LPWSTR wzValue,
+    __inout SIZE_T* pcchValue
+    )
+{
+    HRESULT hr = S_OK;
+    LPWSTR sczValue = NULL;
+    SIZE_T cchRemaining = 0;
+
+    if (wzVariable && *wzVariable && pcchValue)
+    {
+        hr = BundleGetBundleVariableFixed(wzBundleId, wzVariable, sczValue, &cchRemaining);
+        if (E_MOREDATA != hr)
+        {
+            ExitOnFailure(hr, "Unable to read related bundle %ls shared variable %ls", wzBundleId, wzVariable);
+        }
+
+        hr = StrAlloc(&sczValue, cchRemaining);
+        ExitOnFailure(hr, "Failed to allocate buffer for shared variable.");
+
+        hr = BundleGetBundleVariableFixed(wzBundleId, wzVariable, sczValue, &cchRemaining);
+        if (SUCCEEDED(hr))
+        {
+            if (wzValue)
+            {
+                hr = CopyStringToExternal(sczValue, wzValue, pcchValue);
+/*                
+                cchRemaining = dwRemaining;
+
+                hr = ::StringCchCopyExW(wzValue, *pcchValue, sczValue, NULL, &cchRemaining, STRSAFE_FILL_BEHIND_NULL);
+                if (STRSAFE_E_INSUFFICIENT_BUFFER == hr)
+                {
+                    hr = E_MOREDATA;
+
+                    ::StringCchLengthW(sczValue, STRSAFE_MAX_CCH, &cchRemaining);
+                    *pcchValue = cchRemaining + 1;
+                }
+*/                
+            }
+            else
+            {
+                hr = E_MOREDATA;
+                *pcchValue = cchRemaining;
+            }
+        }
+    }
+    else
+    {
+        hr = E_INVALIDARG;
+    }
+
+LExit:
+    StrSecureZeroFreeString(sczValue);
+
+    return hr;
+}
+// TODO
 
 // TODO: callers need to provide the original size (at the time of first public release) of the struct instead of the current size.
 HRESULT WINAPI ExternalEngineValidateMessageParameter(
