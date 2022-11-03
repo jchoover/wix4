@@ -5,10 +5,6 @@
     <BA>customHyperlinkLicense</BA>
     <UpgradeCode>{98ACBCF6-B54A-46AF-8990-DFB8795B965B}</UpgradeCode>
     <Version Condition=" '$(Version)' == '' ">1.0.0.0</Version>
-    <DefineConstants>
-      $(DefineConstants);
-      AVersion=$(Version);
-    </DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\Templates\Bundle.wxs" Link="Bundle.wxs" />

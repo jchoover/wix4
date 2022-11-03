@@ -427,7 +427,6 @@ LExit:
     return hr;
 }
 
-// TODO
 static HRESULT BAEngineGetRelatedBundleVariable(
     __in BOOTSTRAPPER_ENGINE_CONTEXT* pContext,
     __in const LPVOID pvArgs,
@@ -443,7 +442,6 @@ static HRESULT BAEngineGetRelatedBundleVariable(
 LExit:
     return hr;
 }
-// TODO
 
 HRESULT WINAPI EngineForApplicationProc(
     __in BOOTSTRAPPER_ENGINE_MESSAGE message,

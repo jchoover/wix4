@@ -158,7 +158,6 @@ public: // IBootstrapperEngine
         return hr;
     }
 
-// TODO
     virtual STDMETHODIMP GetRelatedBundleVariable(
         __in_z LPCWSTR wzBundleId,
         __in_z LPCWSTR wzVariable,
@@ -186,9 +185,6 @@ public: // IBootstrapperEngine
     LExit:
         return hr;
     }
-
- 
-// TODO
 
     virtual STDMETHODIMP FormatString(
         __in_z LPCWSTR wzIn,
