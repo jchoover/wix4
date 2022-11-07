@@ -810,42 +810,14 @@ HRESULT ExternalEngineGetRelatedBundleVariable(
     )
 {
     HRESULT hr = S_OK;
-    LPWSTR sczValue = NULL;
-    SIZE_T cchRemaining = 0;
-
     if (wzVariable && *wzVariable && pcchValue)
     {
-        hr = BundleGetBundleVariableFixed(wzBundleId, wzVariable, sczValue, &cchRemaining);
-        if (E_MOREDATA != hr)
-        {
-            ExitOnFailure(hr, "Unable to read related bundle %ls variable %ls", wzBundleId, wzVariable);
-        }
-
-        hr = StrAlloc(&sczValue, cchRemaining);
-        ExitOnFailure(hr, "Failed to allocate buffer for related bundle variable.");
-
-        hr = BundleGetBundleVariableFixed(wzBundleId, wzVariable, sczValue, &cchRemaining);
-        if (SUCCEEDED(hr))
-        {
-            if (wzValue)
-            {
-                hr = CopyStringToExternal(sczValue, wzValue, pcchValue);              
-            }
-            else
-            {
-                hr = E_MOREDATA;
-                *pcchValue = cchRemaining;
-            }
-        }
+        hr = BundleGetBundleVariableFixed(wzBundleId, wzVariable, wzValue, pcchValue);
     }
     else
     {
         hr = E_INVALIDARG;
     }
-
-LExit:
-    StrSecureZeroFreeString(sczValue);
-
     return hr;
 }
 

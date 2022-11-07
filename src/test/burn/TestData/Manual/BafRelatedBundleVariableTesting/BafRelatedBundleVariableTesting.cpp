@@ -37,47 +37,17 @@ public: //IBootstrapperApplication
 
         HRESULT hr = S_OK;
         LPWSTR wzValue = NULL;
-        SIZE_T cchValue = 0;
 
-        cchValue = VARIABLE_GROW_FACTOR;
-        hr = StrAlloc(&wzValue, cchValue);
-        ExitOnFailure(hr, "Failed to pre-allocate value.");
+        hr = BalGetRelatedBundleVariable(wzBundleId, STRING_VARIABLE, &wzValue);
 
-        hr = m_pEngine->GetRelatedBundleVariable(wzBundleId, STRING_VARIABLE, wzValue, &cchValue);
-        
-        if (E_MOREDATA == hr)
-        {
-            ++cchValue;
-
-            hr = StrAllocSecure(&wzValue, cchValue);
-            ExitOnFailure(hr, "Failed to allocate value.");
-
-            hr = m_pEngine->GetRelatedBundleVariable(wzBundleId, STRING_VARIABLE, wzValue, &cchValue);
-        }
-        else
-        {
-            ExitOnFailure(hr, "Failed to get related bundle string variable.");
-        }
+        ExitOnFailure(hr, "Failed to get related bundle string variable.");
 
         if (wzValue)
         {
             BalLog(BOOTSTRAPPER_LOG_LEVEL_STANDARD, "AString = %ws", wzValue);
         }
 
-        hr = m_pEngine->GetRelatedBundleVariable(wzBundleId, NUMBER_VARIABLE, wzValue, &cchValue);
-        if (E_MOREDATA == hr)
-        {
-            ++cchValue;
-
-            hr = StrAllocSecure(&wzValue, cchValue);
-            ExitOnFailure(hr, "Failed to allocate value.");
-
-            hr = m_pEngine->GetRelatedBundleVariable(wzBundleId, NUMBER_VARIABLE, wzValue, &cchValue);
-        }
-        else
-        {
-            ExitOnFailure(hr, "Failed to get related bundle number variable.");
-        }
+        hr = BalGetRelatedBundleVariable(wzBundleId, NUMBER_VARIABLE, &wzValue);
 
         if (wzValue)
         {
